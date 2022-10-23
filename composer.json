@@ -1,0 +1,23 @@
+{
+    "name": "raffleshaw/study",
+    "type": "project",
+    "require": {
+        "monolog/monolog": "3.*",
+        "guzzlehttp/guzzle": "7.*",
+        "nesbot/carbon": "2.*",
+        "ext-readline": "*",
+        "ext-json": "*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Study\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andrii Dodon"
+        }
+    ],
+    "minimum-stability": "dev"
+}
