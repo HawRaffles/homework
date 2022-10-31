@@ -4,15 +4,15 @@ namespace Study\UrlCompressor\Helpers;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use InvalidArgumentException;
+use Study\UrlCompressor\Interfaces\ICheckUrl;
 
-class CheckUrl
+class CheckUrl implements ICheckUrl
 {
     protected ClientInterface $httpClient;
-    private int $timeout;
-    private array $statusCodes;
-    private string $userAgent;
-    public string $checkedUrl;
-    public bool $urlType;
+    protected int $timeout;
+    protected array $statusCodes;
+    protected string $userAgent;
 
     public function __construct(ClientInterface $httpClient, int $timeout, array $statusCodes, string $userAgent)
     {
@@ -20,13 +20,9 @@ class CheckUrl
         $this->timeout = $timeout;
         $this->statusCodes = $statusCodes;
         $this->userAgent = $userAgent;
-        $this->urlType = false;
-        $this->checkedUrl = $this->CheckInput();
-        $responseCode = $this->GetRequest();
-        $this->ValidateResponse($responseCode);
     }
 
-    private function CheckInput(): string
+    public function GetInput(): string
     {
         do {
             $input = readline('Введіть корректний URL: ');
@@ -34,25 +30,34 @@ class CheckUrl
         return $input;
     }
 
-    private function GetRequest(): int
+    public function CheckUrl($url): bool
+    {
+        if (!filter_var($url, FILTER_VALIDATE_URL))
+            throw new InvalidArgumentException('Невалідний URL: ' . $url);
+        return $this->GetRequest($url);
+    }
+
+    protected function GetRequest($url): bool
     {
         try {
-            $requestResult = $this->httpClient->request('GET', $this->checkedUrl, [
+            $requestResult = $this->httpClient->request('GET', $url, [
                 'headers' => [
                     'User-Agent' => $this->userAgent,
                 ],
                 'timeout' => $this->timeout
             ]);
             $responseCode = $requestResult->getStatusCode();
-        } catch (GuzzleException $e) {
+        } catch (GuzzleException) {
             $responseCode = 0;
         }
-        return $responseCode;
+        return $this->ValidateResponse($responseCode);
     }
 
-    private function ValidateResponse(int $code): void
+    protected function ValidateResponse(int $code): bool
     {
+        $validity = false;
         if (isset($this->statusCodes[$code]))
-            $this->urlType = true;
+            $validity = true;
+        return $validity;
     }
 }

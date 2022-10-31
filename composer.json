@@ -5,8 +5,10 @@
         "monolog/monolog": "3.*",
         "guzzlehttp/guzzle": "7.*",
         "nesbot/carbon": "2.*",
+        "psr/container": "2.*",
         "ext-readline": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ufo-cms/colored_cli": "^1.0"
     },
     "license": "MIT",
     "autoload": {
