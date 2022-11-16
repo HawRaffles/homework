@@ -14,3 +14,18 @@ services:
     # прописуємо синхронізацію директорій
     volumes:
       - ./:/srv/src/study
+    links:
+      - db_mysql
+
+  db_mysql:
+    image: mysql:latest
+    container_name: php_homework
+    ports:
+      - 13306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: php_homework
+      MYSQL_USER: tars
+      MYSQL_PASSWORD: tars
+    volumes:
+      - ./docker/databases/mysql_dump:/docker-entrypoint-initdb.d

@@ -3,7 +3,6 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Carbon\Carbon;
-use Study\Core\CLI\CLIWriter;
 use Study\Core\CLI\CommandHandler;
 use Study\Core\CLI\Commands\InteractiveMode;
 use Study\Core\CLI\Commands\TestCommand;
