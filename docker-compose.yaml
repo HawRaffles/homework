@@ -2,7 +2,7 @@ version: "3"
 services:
   php:
     # імʼя контейнеру, яке будемо використовувати при вході на контейнер
-    container_name: study_php_hw
+    container_name: homework_php
     build:
       context: ./
       # посилання на докерфайл з налаштуванням контейнеру
@@ -19,7 +19,7 @@ services:
 
   db_mysql:
     image: mysql:latest
-    container_name: php_homework
+    container_name: homework_sql
     ports:
       - 13306:3306
     environment:
@@ -29,3 +29,16 @@ services:
       MYSQL_PASSWORD: tars
     volumes:
       - ./docker/databases/mysql_dump:/docker-entrypoint-initdb.d
+
+  nginx:
+    image: nginx:latest
+    container_name: homework_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/srv/src/study
+      - ./docker/configs/nginx:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx
+    links:
+      - php
